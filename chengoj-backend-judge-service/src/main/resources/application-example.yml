@@ -1,0 +1,59 @@
+# 公共配置文件模板
+spring:
+  application:
+    name: ${APPLICATION_NAME:judge-service}
+  # 默认环境配置
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  # 支持 swagger3
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+      config:
+        server-addr: ${NACOS_CONFIG_SERVER_ADDR:127.0.0.1:8848}
+        file-extension: yml
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
+    connection-timeout: ${RABBITMQ_CONNECTION_TIMEOUT:30000}
+  # 数据库配置（如果需要）
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:judge_db}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # Redis配置（如果需要）
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: ${REDIS_DATABASE:0}
+
+# 服务器配置
+server:
+  address: ${SERVER_ADDRESS:0.0.0.0}
+  port: ${SERVER_PORT:8104}
+  servlet:
+    context-path: ${SERVER_CONTEXT_PATH:/api/judge}
+    session:
+      cookie:
+        max-age: ${SESSION_MAX_AGE:2592000}
+        path: ${SESSION_COOKIE_PATH:/api}
+
+# 代码沙箱配置
+codesandbox:
+  type: ${CODESANDBOX_TYPE:remote}
+
+# 接口文档配置
+knife4j:
+  enable: ${KNIFE4J_ENABLE:true}
+  setting:
+    language: ${KNIFE4J_LANGUAGE:zh-CN}
+

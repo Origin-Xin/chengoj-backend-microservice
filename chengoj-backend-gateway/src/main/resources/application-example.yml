@@ -1,0 +1,45 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        # Nacos 服务发现配置
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+    gateway:
+      routes:
+        - id: ${USER_SERVICE_ID:user-service}
+          uri: lb://${USER_SERVICE_NAME:user-service}
+          predicates:
+            - Path=${USER_SERVICE_PATH:/api/user/**}
+          filters:
+            - StripPrefix=1
+        - id: ${QUESTION_SERVICE_ID:question-service}
+          uri: lb://${QUESTION_SERVICE_NAME:question-service}
+          predicates:
+            - Path=${QUESTION_SERVICE_PATH:/api/question/**}
+          filters:
+            - StripPrefix=1
+        - id: ${JUDGE_SERVICE_ID:judge-service}
+          uri: lb://${JUDGE_SERVICE_NAME:judge-service}
+          predicates:
+            - Path=${JUDGE_SERVICE_PATH:/api/judge/**}
+          filters:
+            - StripPrefix=1
+      discovery:
+        locator:
+          enabled: true # 启用服务发现定位器
+          lower-case-service-id: true # 服务ID小写
+  application:
+    name: ${GATEWAY_APPLICATION_NAME:api-gateway}
+  main:
+    web-application-type: reactive
+server:
+  port: ${GATEWAY_SERVER_PORT:8101}
+knife4j:
+  gateway:
+    enabled: ${KNIFE4J_ENABLED:true}
+    strategy: ${KNIFE4J_STRATEGY:discover}
+    discover:
+      enabled: ${KNIFE4J_DISCOVER_ENABLED:true}
+      version: ${KNIFE4J_DISCOVER_VERSION:swagger2}
