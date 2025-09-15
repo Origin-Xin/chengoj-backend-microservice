@@ -1,0 +1,56 @@
+version: '3'
+services:
+  chengoj-backend-gateway:
+    container_name: chengoj-backend-gateway
+    build: # 服务的 Docker 构建文件位置
+      context: ./chengoj-backend-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8101:8101"
+    networks:
+      - mynetwork
+
+
+  chengoj-backend-user-service:
+    container_name: chengoj-backend-user-service
+    build:
+      context: ./chengoj-backend-user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8102:8102"
+    networks:
+      - mynetwork
+    depends_on: # 本服务依赖的服务，控制启动先后顺序
+      - chengoj-backend-gateway
+
+  chengoj-backend-question-service:
+    container_name: chengoj-backend-question-service
+    build:
+      context: ./chengoj-backend-question-service
+      dockerfile: Dockerfile
+    ports:
+      - "8103:8103"
+    networks:
+      - mynetwork
+    depends_on:
+      - chengoj-backend-user-service
+      - chengoj-backend-gateway
+
+  chengoj-backend-judge-service:
+    container_name: chengoj-backend-judge-service
+    build:
+      context: ./chengoj-backend-judge-service
+      dockerfile: Dockerfile
+    ports:
+      - "8104:8104"
+    networks:
+      - mynetwork
+    depends_on:
+      - chengoj-backend-user-service
+      - chengoj-backend-question-service
+      - chengoj-backend-gateway
+
+# 网络，不定义的话就是默认网络
+networks:
+  mynetwork:
+
